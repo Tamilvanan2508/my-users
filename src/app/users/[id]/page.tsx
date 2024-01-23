@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import React, { useState, useEffect, useCallback } from "react";
 import CustomLoader from "@/components/CustomLoader";
+import { getUserDetails } from "@/app/action";
 
 interface UserDetailsProps {
   params: { id: string };
@@ -21,8 +22,6 @@ interface UserDetails {
   public_gists: string;
 }
 
-const URL = "https://api.github.com/users";
-
 const UserDetails: React.FC<UserDetailsProps> = ({ params }) => {
   const { id } = params || {};
   const router = useRouter();
@@ -32,14 +31,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({ params }) => {
   const fetchUserDetails = useCallback(async () => {
     if (id) {
       setLoading(true);
-      try {
-        const response = await fetch(`${URL}/${id}`);
-        const data = await response.json();
-        setUserDetails(data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
+      const data = await getUserDetails(id);
+      setUserDetails(data);
+      setLoading(false);
     }
   }, [id]);
 

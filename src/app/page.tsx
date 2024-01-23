@@ -6,6 +6,7 @@ import CustomLoader from "../components/CustomLoader";
 import UserCard from "../components/UserCard";
 import CommonPagination from "../components/CommonPagination";
 import { debounceFunction } from "../utils/debounce";
+import { getUsersList } from "@/app/action";
 
 interface User {
   login: string;
@@ -16,7 +17,6 @@ interface User {
   repos_url: string;
 }
 
-const URL = "https://api.github.com/users";
 const ITEMS_PER_PAGE = 10;
 
 export default function Home() {
@@ -28,15 +28,10 @@ export default function Home() {
 
   const fetchUsersList = useCallback(async () => {
     setLoading(true);
-    try {
-      const response = await fetch(`${URL}`);
-      const data = await response.json();
-      setUserList(data);
-      setFilteredUserList(data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
+    const data = await getUsersList();
+    setUserList(data);
+    setFilteredUserList(data);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
