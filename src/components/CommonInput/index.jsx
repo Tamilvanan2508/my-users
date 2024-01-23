@@ -17,7 +17,7 @@ const CommonInput = (props) => {
         id={name}
         name={name}
         onChange={onChange}
-        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300 text-black"
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-purple-300 text-black"
         placeholder={placeHolder}
         disabled={disabled}
         value={value}

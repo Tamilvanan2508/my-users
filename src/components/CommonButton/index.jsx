@@ -5,7 +5,7 @@ const CommonButton = (props) => {
 
   return (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center"
+      className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-full flex items-center"
       onClick={onClick}
     >
       {label}

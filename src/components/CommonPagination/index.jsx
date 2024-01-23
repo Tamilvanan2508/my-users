@@ -6,35 +6,43 @@ const CommonPagination = ({ currentPage, totalPages, onPageChange }) => {
     (_, index) => index + 1
   );
 
+  const Button = ({ onClick, disabled, children, additionalStyles = "" }) => (
+    <button
+      className={`${"mx-2 px-4 py-2 border rounded-full bg-gray-200"} ${additionalStyles} ${
+        disabled ? "text-gray-500 cursor-not-allowed" : "text-gray-700"
+      }`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {children}
+    </button>
+  );
+
   return (
     <div className="flex justify-center mt-4">
-      <button
-        className="mx-2 px-4 py-2 border rounded-full bg-gray-200 text-gray-700"
+      <Button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
         {"<"}
-      </button>
+      </Button>
       {pageNumbers.map((page) => (
-        <button
+        <Button
           key={page}
-          className={`mx-2 px-4 py-2 border rounded-full ${
-            currentPage === page
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
           onClick={() => onPageChange(page)}
+          additionalStyles={
+            currentPage === page ? "bg-purple-500 text-white" : ""
+          }
         >
           {page}
-        </button>
+        </Button>
       ))}
-      <button
-        className="mx-2 px-4 py-2 border rounded-full bg-gray-200 text-gray-700"
+      <Button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
         {">"}
-      </button>
+      </Button>
     </div>
   );
 };

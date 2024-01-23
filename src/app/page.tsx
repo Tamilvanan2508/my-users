@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import CommonInput from "../components/CommonInput";
 import CommonButton from "../components/CommonButton";
 import CustomLoader from "../components/CustomLoader";
@@ -7,14 +7,23 @@ import UserCard from "../components/UserCard";
 import CommonPagination from "../components/CommonPagination";
 import { debounceFunction } from "../utils/debounce";
 
+interface User {
+  login: string;
+  id: number;
+  avatar_url: string;
+  url: string;
+  html_url: string;
+  repos_url: string;
+}
+
 const URL = "https://api.github.com/users";
 const ITEMS_PER_PAGE = 10;
 
 export default function Home() {
-  const [searchValue, setSearchValue] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [filteredUserList, setFilteredUserList] = useState([]);
+  const [userList, setUserList] = useState<User[]>([]);
+  const [filteredUserList, setFilteredUserList] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchUsersList = useCallback(async () => {
@@ -59,14 +68,16 @@ export default function Home() {
     scrollTo(0, 0);
   };
 
-  const getTotalPages = () =>
-    Math.ceil(filteredUserList.length / ITEMS_PER_PAGE);
+  const getTotalPages = useMemo(
+    () => Math.ceil(filteredUserList.length / ITEMS_PER_PAGE),
+    [filteredUserList.length]
+  );
 
-  const getPaginatedList = () => {
+  const getPaginatedList = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     return filteredUserList.slice(startIndex, endIndex);
-  };
+  }, [currentPage, filteredUserList]);
 
   return (
     <div className="flex flex-col items-center justify-start p-5 min-h-screen">
@@ -87,13 +98,13 @@ export default function Home() {
             <>
               {filteredUserList.length > 0 ? (
                 <div className="flex flex-wrap justify-center">
-                  {getPaginatedList().map((item, index) => (
+                  {getPaginatedList.map((item, index) => (
                     <UserCard key={index} user={item} />
                   ))}
                 </div>
               ) : (
                 <p
-                  className={`text-center text-lg text-gray-600 mt-4 ${
+                  className={`text-center text-lg text-purple-600 mt-4 ${
                     searchValue.length > 0 ? "" : "hidden"
                   } `}
                 >
@@ -103,7 +114,7 @@ export default function Home() {
               {filteredUserList.length > ITEMS_PER_PAGE && (
                 <CommonPagination
                   currentPage={currentPage}
-                  totalPages={getTotalPages()}
+                  totalPages={getTotalPages}
                   onPageChange={handlePageChange}
                 />
               )}
