@@ -11,7 +11,7 @@ const UserCard = ({ user }) => {
 
   return (
     <div className="p-1 flex flex-wrap items-center justify-center">
-      <div className="flex-shrink-0 m-6 relative overflow-hidden bg-purple-500 rounded-lg max-w-xs shadow-lg">
+      <div className="flex-shrink-0 m-6 relative overflow-hidden bg-purple-500 rounded-lg max-w-xs shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl">
         <svg
           className="absolute bottom-0 left-0 mb-8"
           viewBox="0 0 375 283"
